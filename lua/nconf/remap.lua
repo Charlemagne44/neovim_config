@@ -11,3 +11,21 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
   end,
 })
+
+-- Run gofmt on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    local filepath = vim.fn.expand("%:p")
+    -- Run gofmt
+    vim.fn.jobstart({ "gofmt", "-w", filepath }, {
+      on_exit = function()
+        -- Reload buffer if gofmt modified the file
+        local current_view = vim.fn.winsaveview()
+        vim.cmd("edit!")
+        vim.fn.winrestview(current_view)
+      end,
+    })
+  end,
+})
+

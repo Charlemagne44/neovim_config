@@ -29,3 +29,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
+-- Disable listing chars for go files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  callback = function()
+    vim.cmd("setlocal nolist")
+  end,
+})
+
